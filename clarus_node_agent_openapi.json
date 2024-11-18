@@ -1,0 +1,161 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Clarus node agent - OpenAPI 3.0",
+    "description": "This is the API provided by the Clarus_node_agent based on the OpenAPI 3.0 specification.  You can find out more about\nSwagger at [https://swagger.io](https://swagger.io). ",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.11"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "tags": [
+    {
+      "name": "ping",
+      "description": "Health check"
+    },
+    {
+      "name": "inference_executor",
+      "description": "Deployment of inference executors for different use cases (exp_id)"
+    },
+    {
+      "name": "model_updater",
+      "description": "Update of model weights"
+    }
+  ],
+  "paths": {
+    "/api/ping": {
+      "get": {
+        "tags": [
+          "ping"
+        ],
+        "summary": "Health check signal",
+        "description": "This endpoint provides a service health check signal",
+        "responses": {
+          "200": {
+            "description": "clarus_node_agent up & running",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "OK"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inference/deploy": {
+      "post": {
+        "tags": [
+          "inference_executor"
+        ],
+        "summary": "Inference service deployment",
+        "description": "Download and deploy an inference service docker image from a docker registry for a specific experiment. This service providesa rest api to run the prediction based on the libraries used by the trainned model.",
+        "requestBody": {
+          "description": "Information needed to select the proper docker image.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InferenceModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "inference service up & running.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "inference_executor"
+        ],
+        "summary": "Stop & remove docker container.",
+        "description": "Stop & remove the container that provides the inference executor for a trainned model.",
+        "parameters": [
+          {
+            "name": "inference_id",
+            "in": "query",
+            "description": "experiment identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "asset already deleted"
+          }
+        }
+      }
+    },
+    "/api/inference/all": {
+      "get": {
+        "tags": [
+          "inference_executor"
+        ],
+        "summary": "Details about inference executors running in the node",
+        "description": "Returns the name and the port where the Rest API is provided.",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "InferenceModel": {
+        "required": [
+          "inference_id",
+          "docker_img_iri",
+          "inference_rest_api_port",
+          "inference_rest_api_forward_port"
+        ],
+        "type": "object",
+        "properties": {
+          "inference_id": {
+            "description": "Unique identifier for the inference model",
+            "type": "string",
+            "example": "UC_Energy"
+          },
+          "docker_img_uri": {
+            "description": "docker image location",
+            "type": "string",
+            "example": "clarusproject/UC_Energy:0.0.1"
+          },
+          "inference_rest_api_port": {
+            "description": "inference image internal rest api port",
+            "type": "string",
+            "example": "8080"
+          },
+          "inference_rest_api_forward_port": {
+            "description": "inference image host rest api port",
+            "type": "string",
+            "example": "8081"
+          }
+        }
+      }
+    }
+  }
+}
