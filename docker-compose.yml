@@ -4,7 +4,7 @@ services:
   clarus_node_agent:
     
     build: .
-    image: clarusproject/clarus_node_agent:v0.0.1
+    image: clarusproject/clarus_node_agent:v0.0.2
     #image: clarus_node_agent:0.0.1
     hostname: clarus_node_agent
     container_name: clarus_node_agent
@@ -17,8 +17,8 @@ services:
      
     ports:
       - 8081:8081
-    environment:
-      -  MLFLOW_TRACKING_URI=$(MLFLOW_TRACKING_URI)
+    #environment:
+      #-  MLFLOW_TRACKING_URI=$(MLFLOW_TRACKING_URI)
     logging:
       driver: "json-file"
       options:
