@@ -126,7 +126,7 @@ components:
         inference_rest_api_forward_port:
           description: inference image host rest api port
           type: string
-          example: 8081         
+          example: 7070         
 
     
 

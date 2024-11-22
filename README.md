@@ -85,32 +85,26 @@ These are the functionalities covered by the REST API.
 - [x] /api/inference/deploy (POST).
    This path will pull an inference docker image and  run it as a service in a docker container. The body request need two parameters:
     ```
-    "exp_id": Experiment identifier. Inference service is valid for that experiment and will use this identifier as container name.
-    "docker_img": Docker registry location where the inference image has been uploaded.
+    "docker_img_uri":Docker image location
+    "inference_id": Unique Inference identifier. Use as container name. 
+    "inference_rest_api_port": Inference image internal rest api port
+    "inference_rest_api_forward_port": inference image host rest api port
     ```
     
 
 - [x] /api/inference/deploy (DELETE).
 This path will stop and remove an inference service container. The path requires the next mandatory parameter.
-    ```
-    "exp_id": Experiment identifier to remove. Inference service is valid for that experiment and will use this identifier as container name.
+    ```   
+    "inference_id": Inference identifier to remove. 
     
     ```
 
 - [x] /api/inference/all (GET).
 This path will provide information about the inference containers that are running in the host where the node agent is deployed. The information contains Inference ID and port where the execution service is provided.
 
- ![clarus_node_agent_inference](images/rest_inference.png)
+ ![clarus_node_agent_inference](images/rest_inference_downloader.png) Update image
 
 
-
-- [x] /api/mlflow/model (PUT).
-This path will download the best model for an experiment(stagged as production in mlflow) from the mlflow repository at MLOPs platform. This model will contain the weights needed to execute the inference. This model will be saved in a docker volume shared with all the inference services downloaded. The body request need one parameter:
-    ```
-    "exp_id": Experiment identifier. Model has been trainned for this experiment.    
-    ```
-
-  ![clarus_node_agent_model](images/rest_model.png)
 
 
 
