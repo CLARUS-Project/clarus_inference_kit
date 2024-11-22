@@ -25,6 +25,27 @@ services:
         max-size: "50m"
         max-file: "5"
 
+  clarus_drift_detector:
+    
+    build: .
+    image: clarusproject/clarus_edge_drift_detector:v0.0.1
+    #image: clarus_node_agent:0.0.1
+    hostname: clarus_drift_detector
+    container_name: clarus_drift_detector
+    #restart: unless-stopped
+    networks:
+      - clarus_inference_network
+     
+    ports:
+      - 5000:5000
+    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+
 networks:
   clarus_inference_network: {"external": True}
        

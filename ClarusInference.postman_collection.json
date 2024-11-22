@@ -1,0 +1,137 @@
+{
+	"info": {
+		"_postman_id": "c9594508-898b-4781-8a2f-e8e28a8bbfc5",
+		"name": "ClarusInference",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6046175"
+	},
+	"item": [
+		{
+			"name": "NodeAgentPing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://34.251.246.165:8081/api/ping",
+					"protocol": "http",
+					"host": [
+						"34",
+						"251",
+						"246",
+						"165"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NodeAgentGetAllInferences",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://34.251.246.165:8081/api/inference/all",
+					"protocol": "http",
+					"host": [
+						"34",
+						"251",
+						"246",
+						"165"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"inference",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NodeAgentDeployInference",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inference_id\":\"inference01\",\r\n    \"docker_img_uri\":\"34.250.205.215:5001/redwine:prod\",\r\n    \"inference_rest_api_port\":\"8080\",\r\n    \"inference_rest_api_forward_port\":\"8081\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://34.251.246.165:8081/api/inference/deploy",
+					"protocol": "http",
+					"host": [
+						"34",
+						"251",
+						"246",
+						"165"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"inference",
+						"deploy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NodeAgentDeleteInference",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://34.251.246.165:8081/api/inference/deploy?exp_id=wine_inference",
+					"protocol": "http",
+					"host": [
+						"34",
+						"251",
+						"246",
+						"165"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"inference",
+						"deploy"
+					],
+					"query": [
+						{
+							"key": "exp_id",
+							"value": "wine_inference"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DataDriftDetector",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

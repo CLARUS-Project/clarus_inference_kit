@@ -14,6 +14,7 @@ This repository contains the docker-compose file needed to install & deploy the 
 - Docker version 23.0.5 or above installed
 - Docker-compose version 1.29.2 or above installed
 - MLOPs platform Docker registry (deployed at 34.250.205.215:5001) configured as insecure-registry in /etc/docker/daemon.json
+- Docker network clarus_inference_network should exist in docker
 
 ## Deployment 
 The content needed for the deployment is available in the Clarus github repository https://github.com/CLARUS-Project and the images used are in the Clarus docker hub repository https://hub.docker.com/repositories/clarusproject.
@@ -33,6 +34,14 @@ The credentials to pull images from docker hub  are saved in the Polimi reposito
       "insecure-registries": [
           "34.250.205.215:5001"
       ]
+    ```
+
+### Create docker network
+
+- Type
+  
+  ```
+      sudo docker network create --driver=bridge clarus_inference_network
     ```
 
 ### Start services
@@ -60,6 +69,8 @@ You shall see next services up:
 ## Inference downloader service usage
 
 Once the service is up and running, it provides a REST API that can be used for other processes running in the pilot plant machines. The REST API can be reached with a web browser at http://<IP_where_clarus_node_agent_is_deployed>:8081/swagger
+
+A postman collection ClarusInference.postman.collection is provided to access the services
 
 These are the functionalities covered by the REST API.
 
