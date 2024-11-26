@@ -5,7 +5,7 @@ This repository contains the docker-compose file needed to install & deploy the 
  - Inference downloader service: This service allows the download of an inference image and the execution as a docker container.
 
 
- - Concept drift service
+ - Data drift service: This service allows to detect data drift in data streams and trigger model retraining workflows using Apache Airflow. The system includes functionalities for reading data from MinIO, detecting data drift using Evidently, updating reference data with the new data, and integrating with IDS providers and Airflow for retraining.
 
 
 ## Requirements
@@ -108,4 +108,27 @@ This path will provide information about the inference containers that are runni
 
 
 
-## Concept drift service usage
+## Data drift service usage
+
+- [x] /api/detect_data_drift (GET).
+Below is the process that occurs when you call this endpoint:
+
+1. **Read Data**:
+   - The API retrieves reference and new datasets from MinIO.
+
+2. **Detect Data Drift**:
+   - It compares the datasets using the Evidently library to determine if there is a significant drift in the new dataset with respect to the reference dataset.
+   - If drift is detected:
+     - A report is generated and saved in MinIO.
+     - The reference dataset is updated with the new dataset.
+
+3. **Update IDS**:
+   - Updates the IDS with data for the new dataset.
+
+4. **Trigger Retraining**:
+   - An Airflow DAG is triggered to retrain the model if drift has been detected, using the new dataset for retraining.
+
+5. **Response**: 
+  ```json
+  {"message": "Drift detected and retraining triggered"} (if drift is detected).
+  {"message": "Drift NOT detected"} (if no drift is detected).
