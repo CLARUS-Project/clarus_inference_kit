@@ -45,6 +45,33 @@ The credentials to pull images from docker hub  are saved in the Polimi reposito
     ```
 
 ### Start services
+Configure the environmental variables: 
+
+#### Airflow Configuration
+
+- **`AIRFLOW_IP`**: The IP address of the Airflow server.
+- **`AIRFLOW_PORT`**: The port where the Airflow server is running.
+- **`ID_AIRFLOW_DAG`**: The ID of the Airflow DAG that will be triggered for model retraining.
+- **`AIRFLOW_USER`**: The username used to authenticate with the Airflow server.
+- **`AIRFLOW_PASSWORD`**: The password used to authenticate with the Airflow server.
+
+#### MinIO Configuration
+
+- **`MINIO_IP`**: The IP address of the MinIO server.
+- **`MINIO_PORT`**: The port where the MinIO server is running.
+- **`MINIO_USER`**: The username used to authenticate with the MinIO server.
+- **`MINIO_PASSWORD`**: The password used to authenticate with the MinIO server.
+- **`MINIO_BUCKET`**: The name of the MinIO bucket where datasets are stored.
+- **`MINIO_REF_DATA`**: The path within the MinIO bucket to the reference dataset (e.g., `uc_wine/winequality-red.csv`).
+- **`MINIO_NEW_DATA`**: The path within the MinIO bucket to the new dataset that will be compared against the reference dataset (e.g., `uc_wine/winequality-red-new.csv`).
+- **`MINIO_REPORT_PATH`**: The path within the MinIO bucket where drift reports will be saved.
+
+#### IDS Provider Configuration
+
+- **`EXPERIMENT_ID`**: The unique identifier for the experiment used in IDS (e.g., `Clarus_RedWine_experiment`).
+- **`IDS_PROVIDER_IP`**: The IP address of the IDS provider server.
+- **`IDS_PROVIDER_PORT`**: The port where the IDS provider server is running.
+
 Move to the folder where the repo has been cloned.
 - Login in Dockerhub using the clarusproject credentials provided in the project
     ```
@@ -114,21 +141,28 @@ This path will provide information about the inference containers that are runni
 Below is the process that occurs when you call this endpoint:
 
 1. **Read Data**:
-   - The API retrieves reference and new datasets from MinIO.
+   - The API retrieves the reference dataset from MinIO at the path specified in the variable `MINIO_REF_DATA` and the new dataset from the path specified in `MINIO_NEW_DATA`.
+   - MinIO is accessed using the `MINIO_IP`, `MINIO_PORT`, `MINIO_USER`, and `MINIO_PASSWORD` variables for authentication.
 
 2. **Detect Data Drift**:
-   - It compares the datasets using the Evidently library to determine if there is a significant drift in the new dataset with respect to the reference dataset.
+   - The datasets are compared using the Evidently library to determine if there is a significant drift in the new dataset with respect to the reference dataset.
    - If drift is detected:
-     - A report is generated and saved in MinIO.
-     - The reference dataset is updated with the new dataset.
+     - A report is generated and saved in MinIO at the path defined in `MINIO_REPORT_PATH`.
+     - The reference dataset in MinIO is updated with the new dataset.
 
 3. **Update IDS**:
-   - Updates the IDS with data for the new dataset.
+   - The IDS is updated with data for the new dataset. The IDS provider is accessed using the variables:
+     - `IDS_PROVIDER_IP`: The IP address of the IDS provider.
+     - `IDS_PROVIDER_PORT`: The port of the IDS provider.
+     - `EXPERIMENT_ID`: The unique identifier for the experiment associated with the dataset.
 
 4. **Trigger Retraining**:
-   - An Airflow DAG is triggered to retrain the model if drift has been detected, using the new dataset for retraining.
+   - An Airflow DAG specified by `ID_AIRFLOW_DAG` is triggered to retrain the model if drift is detected. The Airflow server is accessed using:
+     - `AIRFLOW_IP` and `AIRFLOW_PORT` for server connection.
+     - `AIRFLOW_USER` and `AIRFLOW_PASSWORD` for authentication.
 
-5. **Response**: 
-  ```json
-  {"message": "Drift detected and retraining triggered"} (if drift is detected).
-  {"message": "Drift NOT detected"} (if no drift is detected).
+5. **Response**:
+   - The response from the API indicates whether drift was detected and whether retraining was triggered:
+     ```json
+     {"message": "Drift detected and retraining triggered"} (if drift is detected).
+     {"message": "Drift NOT detected"} (if no drift is detected).
