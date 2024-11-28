@@ -136,6 +136,9 @@ This path will provide information about the inference containers that are runni
 
 
 ## Data drift service usage
+The objective of this service is to identify the existence of datadrift in the data and proceed to retrain the model, so that it adjusts to this new data, and does not become obsolete over time.
+What is needed for the execution to work? The first step is to locate in the corresponding Minio paths the reference dataset and the new dataset on which it will be analyzed if there is a drift with respect to the first dataset mentioned.
+
 
 - [x] /api/detect_data_drift (GET).
 Below is the process that occurs when you call this endpoint:
@@ -160,7 +163,8 @@ Below is the process that occurs when you call this endpoint:
    - An Airflow DAG specified by `ID_AIRFLOW_DAG` is triggered to retrain the model if drift is detected. The Airflow server is accessed using:
      - `AIRFLOW_IP` and `AIRFLOW_PORT` for server connection.
      - `AIRFLOW_USER` and `AIRFLOW_PASSWORD` for authentication.
-
+   - When retraining the model, it must be taken into account that a previously trained model must exist for the flow to work.
+ 
 5. **Response**:
    - The response from the API indicates whether drift was detected and whether retraining was triggered:
      ```json
