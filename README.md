@@ -75,7 +75,7 @@ Configure the environmental variables:
 Move to the folder where the repo has been cloned.
 - Login in Dockerhub using the clarusproject credentials provided in the project
     ```
-    docker login -username=clarusproject
+    docker login --username clarusproject
     ```
 
 
