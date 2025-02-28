@@ -17,8 +17,10 @@ services:
      
     ports:
       - 8081:8081
-    #environment:
+    environment:
       #-  MLFLOW_TRACKING_URI=$(MLFLOW_TRACKING_URI)
+      - IDS_PROVIDER_IP=$(IDS_PROVIDER_IP)
+      
     logging:
       driver: "json-file"
       options:
