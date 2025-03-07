@@ -118,12 +118,31 @@ These are the functionalities covered by the REST API.
 - [x] /api/inference/deploy (POST).
    This path will pull an inference docker image and  run it as a service in a docker container. The body request need two parameters:
     ```
-    "docker_img_uri":Docker image location
-    "inference_id": Unique Inference identifier. Use as container name. 
-    "inference_rest_api_port": Inference image internal rest api port
-    "inference_rest_api_forward_port": inference image host rest api port
+    "docker_img_uri":"Docker image location",
+    "inference_id": "Unique Inference identifier. Use as container name", 
+    "inference_rest_api_port": "Inference image internal rest api port",
+    "inference_rest_api_forward_port": "inference image host rest api port"
     ```
-    
+   Optionally an ‘env’ property can be added. This property is a list of up to 8 environment variables needed in the execution of the inference service.
+
+  ```
+    "docker_img_uri":"Docker image location",
+    "inference_id": "Unique Inference identifier. Use as container name",
+    "inference_rest_api_port": "Inference image internal rest api port",
+    "inference_rest_api_forward_port": "inference image host rest api port",
+    "env":{
+      "env1":"envValue1",
+      "env2":"envValue2",
+      "env3":"envValue3",
+      "env4":"envValue4",
+      "env5":"envValue5",
+      "env6":"envValue6",
+      "env7":"envValue7",
+      "env8":"envValue8",
+
+    }
+    ```
+
 
 - [x] /api/inference/deploy (DELETE).
 This path will stop and remove an inference service container. The path requires the next mandatory parameter.
