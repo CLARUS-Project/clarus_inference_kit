@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c9594508-898b-4781-8a2f-e8e28a8bbfc5",
+		"_postman_id": "9a3ad581-c94a-444e-93b8-12689c92aca4",
 		"name": "ClarusInference",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6046175"
@@ -12,13 +12,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://34.251.246.165:8081/api/ping",
+					"raw": "http://{{clarus_inference_kit_ip}}:8081/api/ping",
 					"protocol": "http",
 					"host": [
-						"34",
-						"251",
-						"246",
-						"165"
+						"{{clarus_inference_kit_ip}}"
 					],
 					"port": "8081",
 					"path": [
@@ -35,13 +32,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://34.251.246.165:8081/api/inference/all",
+					"raw": "http://{{clarus_inference_kit_ip}}:8081/api/inference/all",
 					"protocol": "http",
 					"host": [
-						"34",
-						"251",
-						"246",
-						"165"
+						"{{clarus_inference_kit_ip}}"
 					],
 					"port": "8081",
 					"path": [
@@ -60,7 +54,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"inference_id\":\"inference01\",\r\n    \"docker_img_uri\":\"34.250.205.215:5001/redwine:prod\",\r\n    \"inference_rest_api_port\":\"8080\",\r\n    \"inference_rest_api_forward_port\":\"8081\"\r\n}",
+					"raw": "{\r\n    \"inference_id\":\"inference01\",\r\n    \"docker_img_uri\":\"34.250.205.215:5001/redwine:prod\",\r\n    \"inference_rest_api_port\":\"8080\",\r\n    \"inference_rest_api_forward_port\":\"8081\",\r\n     \"env\":{\r\n\t\"env1\":\"envValue1\",\r\n\t\"env2\":\"envValue2\"\t\r\n\t}\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -68,7 +62,37 @@
 					}
 				},
 				"url": {
-					"raw": "http://34.251.246.165:8081/api/inference/deploy",
+					"raw": "http://{{clarus_inference_kit_ip}}:8081/api/inference/deploy",
+					"protocol": "http",
+					"host": [
+						"{{clarus_inference_kit_ip}}"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"inference",
+						"deploy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NodeAgentDeployInferenceV3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"exp_id\":\"Clarus_RedWine_experiment\",\r\n    \"inference_id\":\"inference01\",\r\n    \"inference_rest_api_forward_port\":\"7070\",\r\n    \"env\":{\r\n\t\"env1\":\"envValue1\",\r\n\t\"env2\":\"envValue2\"\t\r\n\t}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://34.251.246.165:8081/api/v3/inference/deploy",
 					"protocol": "http",
 					"host": [
 						"34",
@@ -79,6 +103,7 @@
 					"port": "8081",
 					"path": [
 						"api",
+						"v3",
 						"inference",
 						"deploy"
 					]
@@ -101,13 +126,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://34.251.246.165:8081/api/inference/deploy?exp_id=wine_inference",
+					"raw": "http://{{clarus_inference_kit_ip}}:8081/api/inference/deploy?exp_id={TO_COMPLETE}",
 					"protocol": "http",
 					"host": [
-						"34",
-						"251",
-						"246",
-						"165"
+						"{{clarus_inference_kit_ip}}"
 					],
 					"port": "8081",
 					"path": [
@@ -118,7 +140,7 @@
 					"query": [
 						{
 							"key": "exp_id",
-							"value": "wine_inference"
+							"value": "{TO_COMPLETE}"
 						}
 					]
 				}
@@ -129,7 +151,19 @@
 			"name": "DataDriftDetector",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://{{clarus_inference_kit_ip}}:5000/api/detect_data_drift",
+					"protocol": "http",
+					"host": [
+						"{{clarus_inference_kit_ip}}"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"detect_data_drift"
+					]
+				}
 			},
 			"response": []
 		}

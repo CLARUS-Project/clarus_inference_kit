@@ -50,7 +50,7 @@ paths:
       tags:
         - inference_executor
       summary: Inference service deployment
-      description: Download and deploy an inference service docker image from a docker registry for a specific experiment. This service providesa rest api to run the prediction based on the libraries used by the trainned model.
+      description: Download and deploy an inference service docker image from a docker registry for a specific experiment. The inference service provides a rest api to run the prediction based on the libraries used by the trainned model.
       requestBody:
         description: Information needed to select the proper docker image.  
         content:
@@ -65,7 +65,29 @@ paths:
             application/json:
               schema:
                 type: string
-       
+
+  /api/v3/inference/deploy:            
+    post:
+      tags:
+        - inference_executor
+      summary: Inference service deployment
+      description: Download and deploy an inference service docker image from a docker registry for a specific experiment. Clarus Dataspace is used to get the inference service metadata ( docker image location & rest port )
+      requestBody:
+        description: Information needed to select the proper docker image.  
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/InferenceModelv3'
+         
+      responses:
+        '201':
+          description: inference service up & running.
+          content:
+            application/json:
+              schema:
+                type: string    
+
+
     delete:
       tags:
         - inference_executor
@@ -126,9 +148,31 @@ components:
         inference_rest_api_forward_port:
           description: inference image host rest api port
           type: string
-          example: 7070         
+          example: 7070           
 
-    
+    InferenceModelv3:
+      required:
+        - exp_id
+        - inference_id
+        - inference_rest_api_forward_port
+        
+      type: object
+      properties:
+        
+        exp_id:
+          description: experiment identifier
+          type: string
+          example: UC_Energy
+        
+        inference_id:
+          description: Unique identifier for the inference model
+          type: string
+          example: UC_Energy
+
+        inference_rest_api_forward_port:
+          description: inference image host rest api port
+          type: string
+          example: 7070    
 
               
 

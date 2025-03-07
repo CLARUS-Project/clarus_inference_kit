@@ -31,10 +31,16 @@ The credentials to pull images from docker hub  are saved in the Polimi reposito
 - Add in the "insecure-registries" entry
   
   ```
+    {
       "insecure-registries": [
           "34.250.205.215:5001"
       ]
+    }
     ```
+- Restart docker
+    ```
+    sudo systemctl restart docker 
+    ```  
 
 ### Create docker network
 
