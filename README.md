@@ -2,10 +2,17 @@
 
 This repository contains the docker-compose file needed to install & deploy the edge services related with the inference execution & monitoring at pilot's edge. Two services are provided.
  
- - Inference downloader service: This service allows the download of an inference image and the execution as a docker container.
+ - clarus_node_agent: Inference image downloader service. This service allows the download of an inference image and the execution as a docker container. Two options are available.
+  
+   1. Inference service is downloaded directly from Docker registry. The user needs to know the location of the image and the Rest port where the port in the image where inference is provided.
+   2. Location and port are shared as a resource through Clarus Data Space 
 
 
- - Data drift service: This service allows to detect data drift in data streams and trigger model retraining workflows using Apache Airflow. The system includes functionalities for reading data from MinIO, detecting data drift using Evidently, updating reference data with the new data, and integrating with IDS providers and Airflow for retraining.
+ - data_drift_detector: This service allows to detect data drift in data streams and trigger model retraining workflows using Apache Airflow. The system includes functionalities for reading data from MinIO, detecting data drift using Evidently, updating reference data with the new data, and integrating with IDS providers and Airflow for retraining.
+
+
+ ![clarus_inference_kit](images/clarus_inference_kit.png)
+
 
 
 ## Requirements
@@ -15,6 +22,8 @@ This repository contains the docker-compose file needed to install & deploy the 
 - Docker-compose version 1.29.2 or above installed
 - MLOPs platform Docker registry (deployed at 34.250.205.215:5001) configured as insecure-registry in /etc/docker/daemon.json
 - Docker network clarus_inference_network should exist in docker
+- clarus_ids_kit should be deployed to use data_drift_detector service
+- clarus_ids_kit (branch clarus_ids_kit_2c) is mandatory when using clarus_node_agent option2
 
 ## Deployment 
 The content needed for the deployment is available in the Clarus github repository https://github.com/CLARUS-Project and the images used are in the Clarus docker hub repository https://hub.docker.com/repositories/clarusproject.
