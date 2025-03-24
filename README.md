@@ -1,10 +1,10 @@
 # clarus_inference_kit
 
-This repository contains the docker-compose file needed to install & deploy the edge services related with the inference execution & monitoring at pilot's edge. Two services are provided.
+This repository contains the docker-compose file needed to install & deploy the edge services related with the inference execution and monitoring at pilot's edge. Two services are provided.
  
  - clarus_node_agent: Inference image downloader service. This service allows the download of an inference image and the execution as a docker container. Two options are available.
   
-   1. Inference service is downloaded directly from Docker registry. The user needs to know the location of the image and the Rest port where the port in the image where inference is provided.
+   1. Inference service is downloaded directly from Docker registry. The user needs to know the location of the image and the image Rest port where inference prediction is provided.
    2. Location and port are shared as a resource through Clarus Data Space 
 
 
@@ -105,7 +105,7 @@ Move to the folder where the repo has been cloned.
     ```
 You shall see next services up:
 
-![clarus_node_agent_service](images/agent_node_deploy.png)
+![clarus_inference_deploy](images/clarus_inference_deploy.png)
 
 
 ## Inference downloader service usage
@@ -116,23 +116,22 @@ A postman collection ClarusInference.postman.collection is provided to access th
 
 These are the functionalities covered by the REST API.
 
+![clarus_inference_api](images/clarus_inference_api.png) 
+
 
 - [x] /api/ping. This path is for health check support
        
-  ![clarus_node_agent_ping](images/rest_ping.png)
-
-
 
  
 - [x] /api/inference/deploy (POST).
-   This path will pull an inference docker image and  run it as a service in a docker container. The body request need two parameters:
+   This path will pull an inference docker image and  run it as a service in a docker container. This path uses option 1 to download inference image. The body request need next parameters:
     ```
     "docker_img_uri":"Docker image location",
     "inference_id": "Unique Inference identifier. Use as container name", 
     "inference_rest_api_port": "Inference image internal rest api port",
     "inference_rest_api_forward_port": "inference image host rest api port"
     ```
-   Optionally an ‘env’ property can be added. This property is a list of up to 8 environment variables needed in the execution of the inference service.
+   Optionally an ‘env’ property can be added. This property is a list of up to 8 environment variables that may be required for the execution of the inference service.
 
   ```
     "docker_img_uri":"Docker image location",
@@ -152,6 +151,31 @@ These are the functionalities covered by the REST API.
     }
     ```
 
+- [x] /api/v3/inference/deploy (POST).
+   This path will pull an inference docker image and  run it as a service in a docker container. This path uses option 2 to download inference image. The body request need next parameters:
+    ```
+    "exp_id":"Unique identifier for the inference service metadata resource in Clarus Data Space",
+    "inference_id": "Unique Inference identifier. Use as container name", 
+    "inference_rest_api_forward_port": "inference image host rest api port"
+    ```
+   Optionally an ‘env’ property can be added. This property is a list of up to 8 environment variables that may be required for the execution of the inference service.
+
+  ```
+    "exp_id":"Unique identifier for the inference service metadata resource in Clarus Data Space",
+    "inference_id": "Unique Inference identifier. Use as container name", 
+    "inference_rest_api_forward_port": "inference image host rest api port",
+    "env":{
+      "env1":"envValue1",
+      "env2":"envValue2",
+      "env3":"envValue3",
+      "env4":"envValue4",
+      "env5":"envValue5",
+      "env6":"envValue6",
+      "env7":"envValue7",
+      "env8":"envValue8",
+
+    }
+    ```
 
 - [x] /api/inference/deploy (DELETE).
 This path will stop and remove an inference service container. The path requires the next mandatory parameter.
@@ -163,10 +187,7 @@ This path will stop and remove an inference service container. The path requires
 - [x] /api/inference/all (GET).
 This path will provide information about the inference containers that are running in the host where the node agent is deployed. The information contains Inference ID and port where the execution service is provided.
 
- ![clarus_node_agent_inference](images/rest_inference_downloader.png) Update image
-
-
-
+ 
 
 
 ## Data drift service usage
